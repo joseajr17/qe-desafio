@@ -1,0 +1,8 @@
+{
+  "vehicle": {
+    "name": "Fiat Uno",
+    "nameForRent": "Chevrolet Onix",
+    "dailyValue": 100
+  },
+  "daysForCalculation": 3
+}

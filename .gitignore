@@ -1,0 +1,12 @@
+# Node
+node_modules/
+
+# Cypress
+cypress/videos/
+cypress/screenshots/
+
+# IDEs e sistema
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

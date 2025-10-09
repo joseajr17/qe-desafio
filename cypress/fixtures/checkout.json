@@ -1,0 +1,12 @@
+{
+    "coupon": {
+        "valid": "DESCONTO50",
+        "invalid": "CUPOMINVALIDO",
+        "value": 50
+    },
+    "vehicles": {
+        "lowValue": "Scooter Elétrica",
+        "midValue": "Chevrolet Onix",
+        "highValue": "Bicicleta Motorizada"
+    }
+}
