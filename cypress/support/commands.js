@@ -1,5 +1,6 @@
 import LoginPage from "../pages/LoginPage";
 import RentalModalPage from "../pages/RentalModalPage";
+import CheckoutModalPage from "../pages/CheckoutModalPage";
 
 Cypress.Commands.add('login', (email, password) => {
     LoginPage.typeEmailField(email);
@@ -11,10 +12,10 @@ Cypress.Commands.add('validatingVehicleModal', (vehicleName) => {
     RentalModalPage.validateVehicleModal(vehicleName);
 });
 
-Cypress.Commands.add('navigateToCheckoutModal', () => {
-    //ETAPA 1: Primeiro Modal
-    cy.contains('button', 'Confirmar Aluguel').click();
+Cypress.Commands.add('navigateToCheckoutModal', (vehicleName) => {
+    cy.validatingVehicleModal(vehicleName);
 
-    //ETAPA 2: Segundo Modal
-    cy.contains('h3', 'Resumo do Pedido').should('be.visible');
+    RentalModalPage.clickConfirmBtn();
+
+    CheckoutModalPage.hasModalTitle();
 });
