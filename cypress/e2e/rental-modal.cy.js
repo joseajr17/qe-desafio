@@ -1,9 +1,13 @@
+import DashboardPage from "../pages/DashboardPage";
+import RentalModalPage from "../pages/RentalModalPage";
+
 describe('Modal de aluguel', () => {
     beforeEach(() => {
         cy.visit('/');
         cy.login('admin@teste.com', '123456');
-        cy.url().should('include', '/dashboard');
-        cy.contains('h1', 'Fleet Manager').should('be.visible');
+
+        DashboardPage.dashboardUrl();
+        DashboardPage.hasDashboardTitle();
     });
 
     context('Casos positivos', () => {
@@ -15,34 +19,19 @@ describe('Modal de aluguel', () => {
 
         it('Deve calcular o valor total corretamente ao inserir 3 dias no veículo escolhido', () => {
             cy.fixture('rental.json').then((rentalData) => {
-                const days = rentalData.daysForCalculation;
-                const dailyValue = rentalData.vehicle.dailyValue;
-                const TotalExpectedValue = days * dailyValue;
-
                 cy.validatingVehicleModal(rentalData.vehicle.name);
 
-                cy.get('#days').type(days);
-
-                cy.get('div.bg-green-50').within(() => {
-                    cy.get('span.font-bold.text-green-600')
-                        .should('contain.text', `R$ ${TotalExpectedValue}`);
-                });
+                const days = rentalData.daysForCalculation;
+                RentalModalPage.verifyAmountValue(days);
             });
         });
 
         it('Deve mostrar a descrição do cálculo corretamente ao inserir 3 dias no veículo escolhido', () => {
             cy.fixture('rental.json').then((rentalData) => {
-                const days = rentalData.daysForCalculation;
-                const dailyValue = rentalData.vehicle.dailyValue;
-
                 cy.validatingVehicleModal(rentalData.vehicle.name);
 
-                cy.get('#days').type(days);
-
-                cy.get('div.bg-green-50').within(() => {
-                    cy.get('p.text-xs.text-green-600')
-                        .should('contain.text', `${days} dias × R$ ${dailyValue}`);
-                });
+                const days = rentalData.daysForCalculation;
+                RentalModalPage.verifyDescriptionValues(days);
             });
         });
 
@@ -50,9 +39,8 @@ describe('Modal de aluguel', () => {
             cy.fixture('rental.json').then((rentalData) => {
                 cy.validatingVehicleModal(rentalData.vehicle.name);
 
-                cy.get('.flex-col-reverse > .border').click();
-
-                cy.get('div[role="dialog"]').should('not.exist');
+                RentalModalPage.clickCancelBtn();
+                RentalModalPage.verifyModalNotExists();
             });
         });
 
@@ -60,9 +48,8 @@ describe('Modal de aluguel', () => {
             cy.fixture('rental.json').then((rentalData) => {
                 cy.validatingVehicleModal(rentalData.vehicle.name);
 
-                cy.contains('button', 'Close').click()
-
-                cy.get('div[role="dialog"]').should('not.exist');
+                RentalModalPage.clickCloseBtn();
+                RentalModalPage.verifyModalNotExists();
             });
         });
 
@@ -70,14 +57,11 @@ describe('Modal de aluguel', () => {
             cy.fixture('rental.json').then((rentalData) => {
                 cy.validatingVehicleModal(rentalData.vehicle.name);
 
-                cy.get('#days').type('2');
-                cy.get('#days').should('have.value', '2');
-
-                cy.get('#days').click();
-
-                cy.get('#days').type('{downarrow}')
-
-                cy.get('#days').should('have.value', '1');
+                RentalModalPage.typeDaysField('2');
+                RentalModalPage.daysFieldHasValue('2');
+                RentalModalPage.clickDaysField();
+                RentalModalPage.typeDaysField('{downarrow}');
+                RentalModalPage.daysFieldHasValue('1');
             });
         });
 
@@ -85,13 +69,13 @@ describe('Modal de aluguel', () => {
             cy.fixture('rental.json').then((rentalData) => {
                 cy.validatingVehicleModal(rentalData.vehicle.name);
 
-                cy.get('#days').should('have.value', '1');
+                RentalModalPage.daysFieldHasValue('1');
 
-                cy.get('#days').click();
+                RentalModalPage.clickDaysField();
 
-                cy.get('#days').type('{uparrow}');
+                RentalModalPage.typeDaysField('{uparrow}');
 
-                cy.get('#days').should('have.value', '2');
+                RentalModalPage.daysFieldHasValue('2');
             });
         });
 
@@ -99,12 +83,11 @@ describe('Modal de aluguel', () => {
             cy.fixture('rental.json').then((rentalData) => {
                 cy.validatingVehicleModal(rentalData.vehicle.nameForRent);
 
-                cy.contains('button', 'Confirmar Aluguel').click();
+                RentalModalPage.clickConfirmBtn();
 
+                // Parte do outro modal 
                 cy.contains('h3', 'Resumo do Pedido').should('be.visible');
             });
-
-
         });
     });
 
@@ -113,11 +96,9 @@ describe('Modal de aluguel', () => {
             cy.fixture('rental.json').then((rentalData) => {
                 cy.validatingVehicleModal(rentalData.vehicle.name);
 
-                cy.get('#days').should('have.value', '1');
-
-                cy.get('#days').type('{downarrow}');
-
-                cy.get('#days').should('have.value', '1');
+                RentalModalPage.daysFieldHasValue('1');
+                RentalModalPage.typeDaysField('{downarrow}');
+                RentalModalPage.daysFieldHasValue('1');
             });
         });
     });
