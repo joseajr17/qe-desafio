@@ -1,7 +1,9 @@
+import LoginPage from "../pages/LoginPage";
+
 Cypress.Commands.add('login', (email, password) => {
-    cy.get('#email').type(email);
-    cy.get('#password').type(password);
-    cy.contains('button', 'Entrar').click();
+    LoginPage.typeEmailField(email);
+    LoginPage.typePasswordField(password);
+    LoginPage.clickLoginBtn();
 });
 
 Cypress.Commands.add('validatingVehicleModal', (vehicleName) => {

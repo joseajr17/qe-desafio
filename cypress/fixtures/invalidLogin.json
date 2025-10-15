@@ -1,0 +1,5 @@
+{
+    "wrongEmail": "emailerrado@teste.com",
+    "invalidEmail": "emailinvalido",
+    "wrongPassword": "senhaErrada"
+}
